@@ -9,6 +9,9 @@ describe Clients::HackerNews, :vcr do
     specify "Get 10 top stories" do
       top_stories = subject.top_stories(10)
       expect(top_stories.size).to eql 10
+      p top_stories.first
+      expect(top_stories.first['by']).to eql 'someone'
     end
+
   end
 end
