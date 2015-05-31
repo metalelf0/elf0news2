@@ -5,7 +5,7 @@ describe Clients::Twitter, :vcr do
 
     specify "Get user by username" do
       user = subject.fetch_user('dhh')
-      expect(user.tweets_count).to eql 25457
+      expect(user['statuses_count']).to eql 25457
     end
   end
 end

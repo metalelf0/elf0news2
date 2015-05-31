@@ -8,12 +8,20 @@ class Services::TopStories
     @@stack_overflow_client ||= Clients::StackExchange.new
   end
 
+  def self.twitter
+    @@twitter_client ||= Clients::Twitter.new
+  end
+
   def hacker_news
     self.class.hacker_news
   end
 
   def stack_overflow
     self.class.stack_overflow
+  end
+
+  def twitter
+    self.class.twitter
   end
 
   def top_stories(limit=50)
@@ -25,6 +33,7 @@ class Services::TopStories
       story_data['user'] = {}
       story_data['user']['hacker_news']  = hacker_news.fetch_user(story_data['story']['by'])
       story_data['user']['stack_overflow']  = stack_overflow.fetch_user(story_data['story']['by'])
+      story_data['user']['twitter']  = twitter.fetch_user(story_data['story']['by'])
       data << story_data
     end
     return data
