@@ -24,17 +24,18 @@ class Services::TopStories
     self.class.twitter
   end
 
-  def top_stories(limit=50)
+  def top_stories(limit=50, progress_printer=Services::CliProgressNull.new)
     top_story_ids = hacker_news.fetch_top_story_ids(limit)
     data = [] 
-    top_story_ids.each do |story_id|
+    top_story_ids.each_with_index do |story_id, current|
       story_data = {}
-      story_data['story'] = hacker_news.fetch_story(story_id)
-      story_data['user'] = {}
-      story_data['user']['hacker_news']  = hacker_news.fetch_user(story_data['story']['by'])
-      story_data['user']['stack_overflow']  = stack_overflow.fetch_user(story_data['story']['by'])
-      story_data['user']['twitter']  = twitter.fetch_user(story_data['story']['by'])
+      story_data['story']                  = hacker_news.fetch_story(story_id)
+      story_data['user']                   = {}
+      story_data['user']['hacker_news']    = hacker_news.fetch_user(story_data['story']['by'])
+      story_data['user']['stack_overflow'] = stack_overflow.fetch_user(story_data['story']['by'])
+      story_data['user']['twitter']        = twitter.fetch_user(story_data['story']['by'])
       data << story_data
+      progress_printer.print_progress_info(current)
     end
     return data
   end

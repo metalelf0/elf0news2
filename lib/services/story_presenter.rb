@@ -10,6 +10,10 @@ class Services::StoryPresenter
     story['story']['title']
   end
 
+  def story_uri
+    story['story']['url']
+  end
+
   def author_id
     story['story']['by']
   end
