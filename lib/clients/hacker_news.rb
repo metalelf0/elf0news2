@@ -7,19 +7,6 @@ class Clients::HackerNews
     @@connection ||= Faraday.new(url: BASE_URL)
   end
 
-  # TODO: move this to another class
-  def top_stories(limit=50)
-    top_story_ids = fetch_top_story_ids(limit)
-    data = [] 
-    top_story_ids.each do |story_id|
-      story_data = {}
-      story_data['story'] = fetch_story(story_id)
-      story_data['user']  = fetch_user(story_data['story']['by'])
-      data << story_data
-    end
-    return data
-  end
-
   def fetch_top_story_ids(limit=50)
     response = self.class.connection.get(TOP_STORIES_PATH)
     return JSON.parse(response.body).take(limit)
